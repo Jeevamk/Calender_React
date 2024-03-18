@@ -1,3 +1,4 @@
+
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -6,34 +7,37 @@ import { useState } from 'react';
 const localizer = momentLocalizer(moment);
 
 const CalendarApp = () => {
-   const [events,setEvents] = useState([])
-   const [showModal,setShowModal] = useState(false)
-   const [selectedDate , setSelectedDate] = useState(null)
-   const [eventTitle,setEventTitle] = useState('')
-   const [date, setDate] = useState(moment().format('YYYY-MM-DD'))
-   const [startTime, setStartTime] = useState('')
-   const [endTime, setEndTime] = useState('')
-   const [selectedEvent, setSelectedEvent] = useState(null); // Track selected event for editing
+  const [events, setEvents] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [eventTitle, setEventTitle] = useState('');
+  const [startTime, setStartTime] = useState('');
+  const [endTime, setEndTime] = useState('');
+  const [selectedEvent, setSelectedEvent] = useState(null); 
 
-   const handleSelectSlot = (slotInfo)=>{
-    setShowModal(true)
-    setSelectedDate(slotInfo.start)
-   }
+  const handleSelectSlot = (slotInfo) => {
+    setShowModal(true);
+    setSelectedDate(moment(slotInfo.start).format('YYYY-MM-DD'));
+  };
 
-   const handleSelectEvent = (event) => {
+  const handleSelectEvent = (event) => {
     setSelectedEvent(event);
     setEventTitle(event.title);
-    setDate(moment(event.start).format('YYYY-MM-DD'));
     setStartTime(moment(event.start).format('HH:mm'));
     setEndTime(moment(event.end).format('HH:mm'));
     setShowModal(true);
   };
 
-   const saveEvent = ()=>{
-    if(eventTitle && date && startTime && endTime){
-      const startDate = moment(date + ' ' + startTime).toDate();
-      const endDate = moment(date + ' ' + endTime).toDate();
-      
+  const handleAddEvent = () => {
+    setShowModal(true);
+    setSelectedDate(null); 
+  };
+
+  const saveEvent = () => {
+    if (eventTitle && startTime && endTime) {
+      const startDate = moment(selectedDate + ' ' + startTime).toDate();
+      const endDate = moment(selectedDate + ' ' + endTime).toDate();
+
       if (selectedEvent) {
         const updatedEvents = events.map((event) =>
           event === selectedEvent
@@ -43,29 +47,27 @@ const CalendarApp = () => {
         setEvents(updatedEvents);
       } else {
         const newEvent = {
-          title : eventTitle,
-          start : startDate,
-          end : endDate,
+          title: eventTitle,
+          start: startDate,
+          end: endDate,
         };
-        setEvents([...events,newEvent])
+        setEvents([...events, newEvent]);
       }
 
       setShowModal(false);
       setEventTitle('');
-      setDate(moment().format('YYYY-MM-DD'));
       setStartTime('');
       setEndTime('');
       setSelectedEvent(null);
     }
-   }
+  };
 
-   const removeEvent = () => {
+  const removeEvent = () => {
     if (selectedEvent) {
       const updatedEvents = events.filter((event) => event !== selectedEvent);
       setEvents(updatedEvents);
       setShowModal(false);
       setEventTitle('');
-      setDate(moment().format('YYYY-MM-DD'));
       setStartTime('');
       setEndTime('');
       setSelectedEvent(null);
@@ -81,7 +83,7 @@ const CalendarApp = () => {
         endAccessor="end"
         selectable={true}
         onSelectSlot={handleSelectSlot}
-        onSelectEvent={handleSelectEvent} // Add event selection handler
+        onSelectEvent={handleSelectEvent} 
         style={{ height: 500 }}
       />
 
@@ -100,16 +102,17 @@ const CalendarApp = () => {
                   required
                 />
               </div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">Date</label>
-                <input
-                  type="date"
-                  className="mt-1 p-2 block w-full rounded-md border border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  required
-                />
-              </div>
+              {selectedDate && (
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700">Date</label>
+                  <input
+                    type="date"
+                    className="mt-1 p-2 block w-full rounded-md border border-gray-300 focus:border-indigo-500 focus:ring focus:ring-indigo-200"
+                    value={selectedDate}
+                    readOnly
+                  />
+                </div>
+              )}
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Start Time</label>
                 <input
@@ -131,13 +134,15 @@ const CalendarApp = () => {
                 />
               </div>
               <div className="flex justify-between">
-                <button
-                  type="button"
-                  className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
-                  onClick={removeEvent}
-                >
-                  Delete
-                </button>
+                {selectedEvent && (
+                  <button
+                    type="button"
+                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
+                    onClick={removeEvent}
+                  >
+                    Delete
+                  </button>
+                )}
                 <div>
                   <button
                     type="submit"
@@ -151,7 +156,6 @@ const CalendarApp = () => {
                     onClick={() => {
                       setShowModal(false);
                       setEventTitle('');
-                      setDate(moment().format('YYYY-MM-DD'));
                       setStartTime('');
                       setEndTime('');
                       setSelectedEvent(null);
@@ -165,6 +169,12 @@ const CalendarApp = () => {
           </div>
         </div>
       )}
+      <button
+        className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        onClick={handleAddEvent}
+      >
+        Add Event
+      </button>
     </div>
   );
 };
