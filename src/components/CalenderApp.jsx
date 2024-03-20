@@ -21,13 +21,17 @@ const CalendarApp = () => {
     setSelectedDate(moment(slotInfo.start).format('YYYY-MM-DD'));
   };
 
+  
+
   const handleSelectEvent = (event) => {
     setSelectedEvent(event);
     setEventTitle(event.title);
     setStartTime(moment(event.start).format('HH:mm'));
     setEndTime(moment(event.end).format('HH:mm'));
+    setSelectedDate(event.start ? moment(event.start).format('YYYY-MM-DD') : null);
     setShowModal(true);
   };
+  
 
   const handleAddEvent = () => {
     setShowModal(true);
@@ -71,6 +75,7 @@ const CalendarApp = () => {
     if (selectedEvent) {
       const updatedEvents = events.filter((event) => event !== selectedEvent);
       setEvents(updatedEvents);
+      localStorage.setItem('events', JSON.stringify(updatedEvents)); 
       setShowModal(false);
       setEventTitle('');
       setStartTime('');
@@ -182,12 +187,15 @@ const CalendarApp = () => {
           </div>
         </div>
       )}
+      <div className='flex'>
       <button
-        className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        className=" fixed md:right-8 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         onClick={handleAddEvent}
       >
         Add Event
       </button>
+      </div>
+      
     </div>
   );
 };

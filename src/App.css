@@ -69,3 +69,20 @@ background-color: black;
 }
 
 
+.big-calendar .rbc-date-cell .rbc-now .rbc-current {
+  background-color: aquamarine;
+}
+
+.big-calendar .rbc-event-content{
+  background-color: rgba(208, 178, 176, 0.684);
+  ;
+}
+
+button {
+  z-index: 999;
+  padding: 12px 20px;
+}
+
+.big-calendar  .rbc-today {
+  background-color: lightgrey;
+}
