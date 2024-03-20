@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 const localizer = momentLocalizer(moment);
 
@@ -28,10 +29,11 @@ const CalendarApp = () => {
     setShowModal(true);
   };
 
-  // const handleAddEvent = () => {
-  //   setShowModal(true);
-  //   setSelectedDate(null); 
-  // };
+  const handleAddEvent = () => {
+    setShowModal(true);
+    setSelectedDate(null); 
+  };
+
 
   const saveEvent = () => {
     if (eventTitle && startTime && endTime) {
@@ -45,13 +47,16 @@ const CalendarApp = () => {
             : event
         );
         setEvents(updatedEvents);
+        localStorage.setItem('events', JSON.stringify(updatedEvents));
       } else {
         const newEvent = {
           title: eventTitle,
           start: startDate,
           end: endDate,
         };
-        setEvents([...events, newEvent]);
+        const updatedEvents = [...events,newEvent]
+        setEvents(updatedEvents);
+        localStorage.setItem('events',JSON.stringify(updatedEvents));
       }
 
       setShowModal(false);
@@ -74,10 +79,17 @@ const CalendarApp = () => {
     }
   };
 
+
+  useEffect(()=>{
+    const storedEvents = JSON.parse(localStorage.getItem('events'));
+    if (storedEvents) {
+      setEvents(storedEvents);
+    }
+  },[])
+
   return (
     <div>
-      <Calendar
-      className='big-calendar'
+      <Calendar className='big-calendar'
         localizer={localizer}
         events={events}
         startAccessor="start"
@@ -170,7 +182,12 @@ const CalendarApp = () => {
           </div>
         </div>
       )}
-      
+      <button
+        className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        onClick={handleAddEvent}
+      >
+        Add Event
+      </button>
     </div>
   );
 };
