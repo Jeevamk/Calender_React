@@ -28,10 +28,10 @@ const CalendarApp = () => {
     setShowModal(true);
   };
 
-  const handleAddEvent = () => {
-    setShowModal(true);
-    setSelectedDate(null); 
-  };
+  // const handleAddEvent = () => {
+  //   setShowModal(true);
+  //   setSelectedDate(null); 
+  // };
 
   const saveEvent = () => {
     if (eventTitle && startTime && endTime) {
@@ -77,6 +77,7 @@ const CalendarApp = () => {
   return (
     <div>
       <Calendar
+      className='big-calendar'
         localizer={localizer}
         events={events}
         startAccessor="start"
@@ -90,7 +91,7 @@ const CalendarApp = () => {
       {showModal && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-gray-800 bg-opacity-70 backdrop-blur-lg z-10">
           <div className="bg-white rounded-lg p-8 max-w-md w-full">
-            <h2 className="text-xl font-semibold mb-4">Add/Edit Event</h2>
+            <h2 className="text-xl font-semibold mb-4">Add Event</h2>
             <form onSubmit={saveEvent}>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700">Event Title</label>
@@ -140,7 +141,7 @@ const CalendarApp = () => {
                     className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600"
                     onClick={removeEvent}
                   >
-                    Delete
+                    Remove Event
                   </button>
                 )}
                 <div>
@@ -169,12 +170,7 @@ const CalendarApp = () => {
           </div>
         </div>
       )}
-      <button
-        className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        onClick={handleAddEvent}
-      >
-        Add Event
-      </button>
+      
     </div>
   );
 };
