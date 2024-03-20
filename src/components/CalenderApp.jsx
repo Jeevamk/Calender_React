@@ -33,10 +33,10 @@ const CalendarApp = () => {
   };
   
 
-  const handleAddEvent = () => {
-    setShowModal(true);
-    setSelectedDate(null); 
-  };
+  // const handleAddEvent = () => {
+  //   setShowModal(true);
+  //   setSelectedDate(null); 
+  // };
 
 
   const saveEvent = () => {
@@ -188,12 +188,12 @@ const CalendarApp = () => {
         </div>
       )}
       <div className='flex'>
-      <button
+      {/* <button
         className=" fixed md:right-8 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
         onClick={handleAddEvent}
       >
         Add Event
-      </button>
+      </button> */}
       </div>
       
     </div>
